@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sim ou Não</title>
+  <title>Carteirinha de Posse ❤️</title>
   <style>
     * {
       margin: 0;
@@ -12,100 +12,162 @@
     }
 
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #000; /* Fundo preto */
-      color: #fff;
+      background-color: #000; /* Fundo preto */
+      color: #fff; /* Letras brancas */
     }
 
     .container {
       text-align: center;
-      background: rgba(255, 255, 255, 0.1); /* Leve transparência */
-      padding: 30px 50px;
-      border-radius: 15px;
-      box-shadow: 0 8px 15px rgba(255, 255, 255, 0.2); /* Glow leve */
+      background: rgba(255, 255, 255, 0.1); /* Fundo escuro e leve transparência */
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      max-width: 420px;
+      width: 100%;
     }
 
     h1 {
       font-size: 2.5em;
-      margin-bottom: 20px;
-      text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.3);
+      color: #f4a261; /* Dourado suave */
+      margin-bottom: 30px;
+      font-family: 'Roboto Slab', serif; /* Fonte mais robusta */
+    }
+
+    label {
+      font-size: 1.2em;
+      margin-bottom: 12px;
+      display: block;
+      color: #d3d3d3;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.2em;
+      margin-bottom: 25px;
+      border: 2px solid #f4a261;
+      border-radius: 10px;
+      background: #333;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #f4a261;
+      outline: none;
     }
 
     button {
-      font-size: 1.2em;
-      padding: 10px 20px;
-      margin: 10px;
+      padding: 15px 25px;
+      font-size: 1.4em;
+      background-color: #f4a261;
+      color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 15px;
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
+      transition: background-color 0.3s;
     }
 
-    button#sim {
-      background-color: #4caf50;
-      color: #fff;
+    button:hover {
+      background-color: #e76f51; /* Dourado mais forte */
     }
 
-    button#sim:hover {
-      background-color: #45a049;
-      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.5);
+    #carteirinha {
+      display: none;
+      text-align: center;
+      padding: 40px;
     }
 
-    button#nao {
-      background-color: #f44336;
-      color: #fff;
-      position: absolute;
-      will-change: transform; /* Melhora performance em animações */
+    .card {
+      border: 3px solid #f4a261;
+      border-radius: 15px;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.8); /* Fundo escuro para o cartão */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      display: inline-block;
+      margin-top: 25px;
+      width: 500px; /* Aumentando a largura da carteirinha */
     }
 
-    button#nao:hover {
-      background-color: #e53935;
+    .card h2 {
+      margin: 15px 0;
+      color: #f4a261;
+      font-family: 'Roboto Slab', serif;
+      font-size: 1.8em;
     }
+
+    .card p {
+      margin: 10px 0;
+      color: #d3d3d3;
+      font-size: 1.4em;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #f4a261;
+      font-size: 1.5em;
+    }
+
+    .frase {
+      margin-top: 20px;
+      font-size: 1.6em;
+      font-family: 'Roboto Slab', serif;
+      font-style: italic;
+      color: #f4a261;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap');
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Você gosta de diversão?</h1>
-    <button id="sim">Sim</button>
-    <button id="nao">Não</button>
+  <div class="container" id="formulario">
+    <h1>Realizando um sonho</h1>
+    <label for="posse">Qual o seu nome?</label>
+    <input type="text" id="posse" placeholder="Digite seu nome" required>
+    <button onclick="gerarCarteirinha()">Gerar Carteirinha</button>
+  </div>
+
+  <div id="carteirinha">
+    <h1>Carteirinha de Posse</h1>
+    <div class="card">
+        <p><span id="nomeExibido" class="highlight">[Seu Nome Aqui]</span></p>
+      <h2>Propriedade Exclusiva de:</h2>
+      <p><span id="posseExibido" class="highlight"></span></p>
+      <p>Data de emissão: <span id="data"></span></p>
+    </div>
+    <button onclick="window.location.reload()">Voltar</button>
   </div>
 
   <script>
-    const botaoNao = document.getElementById('nao');
-    const botaoSim = document.getElementById('sim');
+    function gerarCarteirinha() {
+      const posse = document.getElementById('posse').value;
 
-    let tentativas = 0; // Contador para evitar bugs
-
-    // Evento de clique para o botão "Sim"
-    botaoSim.addEventListener('click', () => {
-      alert('Eu sabia! 😄');
-    });
-
-    // Evento para mover o botão "Não"
-    botaoNao.addEventListener('mouseover', () => {
-      const larguraTela = window.innerWidth;
-      const alturaTela = window.innerHeight;
-
-      // Previne bugs no celular após múltiplos movimentos
-      if (tentativas >= 3) {
-        botaoNao.style.position = 'static';
-        botaoNao.style.marginTop = '20px';
-        botaoNao.textContent = "Ok, você venceu 😂";
+      if (posse === "") {
+        alert("Por favor, preencha o campo com o seu nome!");
         return;
       }
 
-      const novaPosicaoX = Math.random() * (larguraTela - botaoNao.offsetWidth);
-      const novaPosicaoY = Math.random() * (alturaTela - botaoNao.offsetHeight);
+      // Define o seu nome fixo como namorado(a)
+      const meuNome = "joao neto"; // Substitua pelo seu nome
 
-      botaoNao.style.transform = `translate(${novaPosicaoX}px, ${novaPosicaoY}px)`;
-      tentativas++;
-    });
+      // Insere os dados na carteirinha
+      document.getElementById('posseExibido').textContent = posse;
+      document.getElementById('nomeExibido').textContent = meuNome;
+
+      // Adiciona a data atual
+      const hoje = new Date();
+      const dataFormatada = hoje.toLocaleDateString();
+      document.getElementById('data').textContent = dataFormatada;
+
+      // Exibe a carteirinha e oculta o formulário
+      document.getElementById('formulario').style.display = 'none';
+      document.getElementById('carteirinha').style.display = 'block';
+    }
   </script>
 </body>
 </html>
-
-
